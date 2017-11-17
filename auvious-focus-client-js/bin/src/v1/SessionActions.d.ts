@@ -1,0 +1,10 @@
+import { Action } from "./Action";
+export declare function switchState(state: string): Action;
+export declare function sendFailedEvent(): Action;
+export declare function sendRingingEvent(): Action;
+export declare function sendLocalStreamAddedEvent(): Action;
+export declare function sendRemoteStreamAddedEvent(): Action;
+export declare function updateSessionEndpointData(): Action;
+export declare function sendAcceptedEvent(): Action;
+export declare function sendEndedEvent(): Action;
+export declare function setupOnAddStream(): Action;

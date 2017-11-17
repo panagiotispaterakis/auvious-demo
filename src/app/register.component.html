@@ -1,0 +1,20 @@
+<h1>{{ title }}</h1>
+<h4 *ngIf="connecting()">connecting...</h4>
+<input [(ngModel)]="username" placeholder="username" /><br/>
+<input [(ngModel)]="password" type="password" placeholder="password (optional)" (keyup.enter)="register()" /><br/>
+<input [(ngModel)]="jwt" type="text" size="40" placeholder="jwt (optional)" /> (Use secret 'auvious')<br/>
+<input [(ngModel)]="focusUrl" type="text" size="40" placeholder="sip server(optional)" /> <br/>
+<button (click)="connect()">Connect</button>
+<button (click)="register()">Register</button>
+<button (click)="goHome()">Home</button>
+<br/>
+
+<div *ngIf="registrationFailed">
+    {{ registrationFailedMessage }}
+</div>
+<div *ngIf="connectionFailed">
+    {{ connectionFailedMessage }}
+</div>
+<div *ngIf="warning">
+    {{ warningMessage }}
+</div>

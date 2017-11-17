@@ -1,0 +1,52 @@
+<h1>{{ title }}</h1>
+
+<hr/>
+<h1>Debug WebRTC</h1><br/>
+
+<video id='localVideo' muted autoplay width="160" height="120" style="background-color: black;"></video>
+<video id='remoteVideo' autoplay width="160" height="120" style="background-color: black;"></video>
+<br/>
+<button (click)="initWebRTC()">initWebRTC</button><br/>
+<label>Send Audio</label><input type="checkbox" [(ngModel)]="sendConstraints.audio" /><br/>
+<label>Send Video</label><input type="checkbox" [(ngModel)]="sendConstraints.video" /><br/>
+<button (click)="getUserMedia()">getUserMedia</button>
+<button *ngIf="localStream != null" (click)="closeLocalStream()">Close</button>
+<button (click)="createPeerConnection()">createPeerConnection</button><br/>
+<input #channel placeholder="channel name" />
+<button (click)="addDataChannel(channel.value)">addDataChannel</button><br/>
+<button (click)="addLocalStream()">addLocalStream</button><br/>
+<label>Receive Audio</label><input type="checkbox" [(ngModel)]="receiveConstraints.audio" /><br/>
+<label>Receive Video</label><input type="checkbox" [(ngModel)]="receiveConstraints.video" /><br/>
+<button (click)="createOffer()">createOffer</button>
+<br>
+<div *ngIf="offer.length > 0">
+    <label>Offer: </label>
+    <code>
+    {{ offer }}
+</code>
+</div>
+<br/>
+<textarea #remoteSdp rows="25" cols="80" placeholder="remote sdp"></textarea>
+<br/>
+<button (click)="setRemoteDescription(remoteSdp.value)">setRemoteDescription</button>
+<button (click)="createAnswer()">createAnswer</button>
+<br/>
+<div *ngIf="answer.length > 0">
+    <label>Answer: </label>
+    <code>
+        {{ answer }}
+    </code>
+</div>
+<br/>
+
+<div *ngIf="candidates.length > 0">
+    <ul>
+        <li *ngFor="let candidate of candidates">
+            {{ candidate }}
+        </li>
+    </ul>
+</div>
+
+<input #candidate type="text" size="40" placeholder="remote candidate" />
+<br/>
+<button (click)="addCandidate(candidate.value)">addCandidate</button>

@@ -1,0 +1,29 @@
+{
+  "name": "auvious-focus-client-js",
+  "version": "1.0.0",
+  "main": "./bin/index.umd.js",
+  "typings": "./bin/index.d.ts",
+  "scripts": {
+    "webpack": "webpack",
+    "tsc": "tsc"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "es6-promise": "~4.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "~6.0.46",
+    "@types/uuid": "~2.0.29",
+    "@types/xml2js": "0.0.28",
+    "cpr": "~2.0.0",
+    "debug": "~2.6.0",
+    "json-loader": "~0.5.4",
+    "jssip": "pimenas/JsSIP#auvious",
+    "rimraf": "~2.5.4",
+    "ts-loader": "~0.8.2",
+    "typescript": "2.4.0",
+    "uuid": "~3.0.1",
+    "webpack": "~1.13.2",
+    "xml2js": "~0.4.17"
+  }
+}

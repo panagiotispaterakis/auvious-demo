@@ -1,0 +1,121 @@
+<div>
+    <h3>.::.{{ sipService.identity() }}.::.</h3>
+    <div *ngIf="!sipService.connected()">
+        <h3>Disconnected... trying to reconnect (attempt #{{ attempts }})</h3>
+        <button (click)="exit()">Exit</button>
+    </div>
+    <div *ngIf="!!warning">
+        <h3>{{ warning }}</h3>
+    </div>
+    <div *ngIf="elemArray.length > 0">
+        <button (click)="playElems()">Play Media</button>
+    </div>
+    <table>
+        <tr>
+            <td>
+                <div [hidden]="!localStream">
+                    <label>Local: </label>
+
+                    <span *ngIf="localStreamHasMicrophone()">A</span>
+                    <span *ngIf="localStreamHasMicrophone() && localStreamHasCamera()">-</span>
+                    <span *ngIf="localStreamHasCamera()">V</span>
+
+                    <br/>
+                    <video id="local-video" playsinline autoplay muted width="160" height="120" style="background-color: black;"></video>
+                </div>
+            </td>
+            <td>
+                <div [hidden]="!remoteStream">
+                    <label>Remote: </label>
+                    <span *ngIf="remoteStreamHasMicrophone()">A</span>
+                    <span *ngIf="remoteStreamHasMicrophone() && remoteStreamHasCamera()">-</span>
+                    <span *ngIf="remoteStreamHasCamera()">V</span>
+                    <br/>
+                    <video id="remote-video" playsinline autoplay width="160" height="120" style="background-color: black;"></video>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br/>
+    <div>
+        <label>Send Video</label><input type="checkbox" [(ngModel)]="sendConstraints.video" />
+        <label>Send Audio</label><input type="checkbox" [(ngModel)]="sendConstraints.audio" />
+        <label>Receive Video</label><input type="checkbox" [(ngModel)]="receiveConstraints.video" />
+        <label>Receive Audio</label><input type="checkbox" [(ngModel)]="receiveConstraints.audio" />
+    </div>
+    <div *ngIf="!ongoingCall">
+        <input [(ngModel)]="contact" placeholder="contact" (keyup.enter)="call()" />
+        <button (click)="call()">Call</button>
+    </div>
+    <div id="callFailed" *ngIf="callFailed">
+        {{ callFailedMsg }}
+    </div>
+    <div id="incomingCall" *ngIf="incomingCall()">
+        <p>Incoming call from {{ session.remoteEndpoint.username }}</p>
+        <button (click)="answer()">Answer</button>
+        <button (click)="hangup()">Reject</button>
+    </div>
+    <audio hidden id="ringing" src="assets/sounds/ringing.mp3" loop>
+        Your browser does not support the audio element.
+    </audio>
+    <div id="outgoingCall" *ngIf="outgoingCall()">
+        <p>Outgoing call to {{ session.remoteEndpoint.username }}</p>
+        <button (click)="hangup()">Cancel</button>
+    </div>
+    <audio hidden id="remote-ringing" src="assets/sounds/remote_ringing.mp3" loop>
+        Your browser does not support the audio element.
+    </audio>
+    <div id="establishedCall" *ngIf="establishedCall()">
+        <p>Established call to {{ session.remoteEndpoint.username }}</p>
+        <button (click)="hangup()">Hangup</button>
+        <button *ngIf="!session.isOnHold().local && !session.isOnHold().remote" (click)="session.hold()">Hold</button>
+        <button *ngIf="session.isOnHold().local" (click)="session.unhold()">Unhold</button>
+        <br/>
+        <div *ngIf="isOnHold">
+            Call is currently on hold!
+        </div>
+    </div>
+</div>
+<hr/>
+<div>
+    <h3>Conference</h3>
+    <label>Join Conference</label>
+    <input #conferenceId/>
+    <button (click)="joinConference(conferenceId.value)">Join</button>
+    <br/><br/>
+    <label>Create Conference.</label> <br/>
+    <label>id</label>
+    <input type="text" #conferenceName (change)="0" /><br/>
+    <label>Peer to Peer mode?</label>
+    <input type="checkbox" #p2p (change)="0" /><br/>
+    <button (click)="createConference(p2p.checked, conferenceName.value)">Create</button><br/>
+
+    <div *ngIf="conferences.length > 0">
+        <h4>Active Conferences</h4>
+        <ul>
+            <li *ngFor="let conference of conferences">
+                <label>{{ conference.name }} ({{ conference.mode }})</label>
+                <button (click)="joinConference(conference.name)">Join</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<hr/>
+<div>
+    <h3>Messaging</h3>
+    <label>To:</label>
+    <input #user/><br/>
+    <label>Message:</label>
+    <input #message (keyup.enter)="sendMessage(user.value, message.value)" /><br/>
+    <button (click)="sendMessage(user.value, message.value)">Send</button><br/>
+    <ul>
+        <li *ngFor="let message of messages">{{ message }}</li>
+    </ul>
+</div>
+<hr/>
+<div>
+    <span>
+    <button (click)="viewRecordings()">View Recordings</button>
+    <button (click)="logout()">Logout</button>
+    </span>
+</div>

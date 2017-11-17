@@ -1,0 +1,63 @@
+<h1>{{ title }}</h1>
+<h3>.::.{{ sipService.identity() }}.::.</h3>
+
+<div *ngIf="outgoingCallInProgress()">
+    <p>Outgoing conference call to {{ session.remoteEndpoint.username }} (mode {{ conference.mode }})</p>
+    <button (click)="leaveConference()">Cancel</button>
+</div>
+
+
+<div *ngIf="!!warning">
+    <h3>{{ warning }}</h3>
+</div>
+
+<div *ngIf="elemArray.length > 0">
+    <button (click)="playElems()">Play Media</button>
+</div>
+
+<div *ngIf="establishedCall()">
+    <img *ngIf="recording" src="/images/record.png" width="16" height="16" alt="recording conference" />
+    <p>Established conference call to {{ session.remoteEndpoint.username }} (mode {{ conference.mode }})</p>
+    <button *ngIf="!isMicOn()" (click)="publishMic()">Share Microphone</button>
+    <button *ngIf="isMicOn()" (click)="unpublishMic()">Close Microphone</button>
+    <button *ngIf="!isCameraOn()" (click)="publishCamera()">Share Camera</button>
+    <button *ngIf="isCameraOn()" (click)="unpublishCamera()">Close Camera</button>
+    <button *ngIf="!isVideoOn()" (click)="publishVideo()">Share Video</button>
+    <button *ngIf="isVideoOn()" (click)="unpublishVideo()">Close Video</button>
+    <button *ngIf="!isScreenOn()" (click)="publishScreen()">Share Screen</button>
+    <button *ngIf="isScreenOn()" (click)="unpublishScreen()">Close Screen</button>
+    <button *ngIf="!recording" (click)="record()">Record</button>
+    <button *ngIf="recording" (click)="stopRecording()">Stop Recording</button>
+    <button (click)="leaveConference()">Leave</button>
+    <button (click)="endConference()">End(and leave)</button>
+    <br/>
+</div>
+
+<br/><br/>
+<hr/>
+
+<table border="1">
+    <tr>
+        <td *ngIf="!!myself">
+            <label [id]="myself.endpoint"> {{ myself.username }} (Me):
+                <span> {{ streamCaption(myself) }} </span>
+            </label><br/>
+            <video *ngIf="hasCamera(myself)" [id]="cameraId(myself)" playsinline autoplay muted width="160" height="120" style="background-color: black;"></video>
+            <video *ngIf="hasVideo(myself)" [id]="videoId(myself)" playsinline autoplay muted width="160" height="120" style="background-color: black;"></video>
+            <video *ngIf="hasScreen(myself)" [id]="screenId(myself)" playsinline autoplay muted width="160" height="120" style="background-color: black;"></video>
+            <audio *ngIf="hasMicrophone(myself)" [id]="microphoneId(myself)" playsinline autoplay muted>Microphone</audio>
+        </td>
+        <td *ngFor="let participant of participantArray">
+            <label [id]="participant.endpoint">{{ participant.username }}:
+                <span> {{ streamCaption(participant) }} </span>
+            </label><br/>
+            <video *ngIf="hasCamera(participant)" [id]="cameraId(participant)" playsinline autoplay width="160" height="120" style="background-color: black;"></video>
+            <video *ngIf="hasVideo(participant)" [id]="videoId(participant)" playsinline autoplay width="160" height="120" style="background-color: black;"></video>
+            <video *ngIf="hasScreen(participant)" [id]="screenId(participant)" playsinline autoplay width="160" height="120" style="background-color: black;"></video>
+            <audio *ngIf="hasMicrophone(participant)" [id]="microphoneId(participant)" playsinline autoplay>Audio</audio>
+        </td>
+    </tr>
+</table>
+
+<br/><br/>
+<hr/>
